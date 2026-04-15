@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>PROGETTO EROI: IL PUZZLE DELL'UNIONE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; }
+        
+        html, body {
+            margin: 0; padding: 0;
+            width: 100%; height: 100%;
+            overflow: hidden;
+            background: radial-gradient(circle, #450000 0%, #000000 100%);
+            font-family: 'Oswald', sans-serif;
+            display: flex;
+            color: #fff;
+            perspective: 2000px;
+        }
+
+        /* --- SIDEBAR --- */
+        #sidebar {
+            width: 280px; min-width: 280px;
+            height: 100vh;
+            background-color: rgba(20, 0, 0, 0.95);
+            border-right: 4px solid #ff0000;
+            padding: 25px;
+            display: flex; flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 10px 0 25px rgba(255,0,0,0.3);
+            z-index: 10;
+        }
+
+        h1 {
+            color: #ff0000;
+            font-size: 1.6rem;
+            margin: 0;
+            text-transform: uppercase;
+            text-align: center;
+            letter-spacing: 1px;
+            line-height: 1.3;
+            text-shadow: 0 0 10px rgba(255,0,0,0.5);
+        }
+
+        .mission-box {
+            background: #2a0000;
+            padding: 20px;
+            border-radius: 4px;
+            border: 1px solid #ff4444;
+        }
+
+        .mission-box h2 {
+            font-size: 1.1rem;
+            margin: 0 0 10px 0;
+            color: #ff0000;
+            border-bottom: 1px solid #ff0000;
+            text-transform: uppercase;
+        }
+
+        .mission-box p {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin: 10px 0;
+            color: #ffcccc;
+        }
+
+        #btn-shuffle {
+            width: 100%;
+            padding: 15px;
+            background-color: #ff0000;
+            color: #fff;
+            border: none;
+            border-radius: 2px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: 0.3s;
+        }
+
+        #btn-shuffle:hover {
+            background-color: #ff4444;
+            box-shadow: 0 0 20px #ff0000;
+        }
+
+        /* --- AREA GIOCO 3D --- */
+        #game-area {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+        }
+
+        #flip-card {
+            width: 840px;
+            height: 420px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 0 50px rgba(255,0,0,0.5);
+            border: 4px solid #ff0000;
+        }
+
+        #flip-card.flipped { transform: rotateY(180deg); }
+
+        .card-face {
+            position: absolute;
+            width: 100%; height: 100%;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+
+        #puzzle-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            grid-template-rows: repeat(6, 1fr);
+            width: 100%; height: 100%;
+            background-color: #000;
+            gap: 0;
+        }
+
+        .tile {
+            width: 140px; 
+            height: 70px; 
+            background-image: url('classe.jpg');
+            background-size: 840px 420px; 
+            cursor: pointer;
+            border: 0.1px solid rgba(255, 0, 0, 0.1);
+        }
+
+        .selected {
+            outline: 5px solid #ff0000 !important;
+            outline-offset: -5px;
+            z-index: 5;
+            position: relative;
+        }
+
+        #retro-image {
+            background-image: url('classeclasse.jpg');
+            background-size: cover;
+            transform: rotateY(180deg);
+        }
+
+        /* --- VITTORIA --- */
+        #victory-screen {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.96);
+            z-index: 1000;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 1.5s ease;
+        }
+
+        #victory-screen.show { display: flex; opacity: 1; }
+        
+        #secret-number { font-size: 8rem; color: #f1c40f; display: none; font-weight: bold; text-shadow: 0 0 30px #f1c40f; }
+
+        .btn-reveal {
+            padding: 15px 50px; background-color: #ff0000; color: #fff;
+            border: 2px solid #fff; border-radius: 5px; font-weight: 700;
+            cursor: pointer; text-transform: uppercase; margin-top: 20px;
+        }
+
+        #confetti-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 999; }
+    </style>
+</head>
+<body>
+
+    <div id="sidebar">
+        <h1>PROGETTO EROI:<br>IL PUZZLE DELL'UNIONE</h1>
+        
+        <div class="mission-box">
+            <h2>ISTRUZIONI</h2>
+            <p>1. <b>Scegli:</b> Clicca una tessera per attivare la selezione tattica.</p>
+            <p>2. <b>Sposta:</b> Clicca un'altra tessera per scambiare i frammenti.</p>
+            <p>3. <b>Unite:</b> Ricomponi la squadra per completare la missione.</p>
+        </div>
+
+        <button id="btn-shuffle" onclick="location.reload()">RIMESCOLA</button>
+    </div>
+
+    <div id="game-area">
+        <div id="flip-card">
+            <div class="card-face"><div id="puzzle-grid"></div></div>
+            <div class="card-face" id="retro-image"></div>
+        </div>
+    </div>
+
+    <canvas id="confetti-canvas"></canvas>
+
+    <div id="victory-screen">
+        <h2 style="color:#ff0000; font-size: 3.5rem; margin: 0;">MISSIONE COMPIUTA</h2>
+        <p style="font-style: italic; max-width: 800px; font-size: 1.3rem; line-height: 1.6; margin: 20px auto; padding: 0 20px;">
+            "Proprio come ogni grande squadra di supereroi, ogni elemento di questa classe è un pezzo unico e indispensabile. Separatamente siete individui straordinari, ma è solo quando siete uniti, fianco a fianco, che l'immagine del vostro reale potenziale diventa chiara. Ben fatto, eroi!"
+        </p>
+        
+        <div id="secret-number">3</div>
+        <button class="btn-reveal" id="revealBtn" onclick="showCode()">ACCESSO CODICE SEGRETO</button>
+    </div>
+
+    <script>
+        const grid = document.getElementById('puzzle-grid');
+        const flipCard = document.getElementById('flip-card');
+        const victoryScreen = document.getElementById('victory-screen');
+        const canvas = document.getElementById('confetti-canvas');
+        const ctx = canvas.getContext('2d');
+
+        const rows = 6, cols = 6;
+        const tileW = 140, tileH = 70;
+        let tilesArray = [];
+        let firstIndex = null;
+        let isLocked = false;
+        let confettiActive = false;
+
+        function init() {
+            tilesArray = Array.from({length: 36}, (_, i) => i);
+            for (let i = 35; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [tilesArray[i], tilesArray[j]] = [tilesArray[j], tilesArray[i]];
+            }
+            render();
+        }
+
+        function render() {
+            grid.innerHTML = '';
+            tilesArray.forEach((val, i) => {
+                const tile = document.createElement('div');
+                tile.classList.add('tile');
+                const origCol = val % cols;
+                const origRow = Math.floor(val / cols);
+                tile.style.backgroundPosition = `${-(origCol * tileW)}px ${-(origRow * tileH)}px`;
+                
+                tile.onclick = () => {
+                    if (isLocked) return;
+                    if (firstIndex === null) {
+                        firstIndex = i;
+                        tile.classList.add('selected');
+                    } else {
+                        [tilesArray[firstIndex], tilesArray[i]] = [tilesArray[i], tilesArray[firstIndex]];
+                        firstIndex = null;
+                        render();
+                        if (tilesArray.every((v, idx) => v === idx)) startFinalSequence();
+                    }
+                };
+                grid.appendChild(tile);
+            });
+        }
+
+        function startFinalSequence() {
+            isLocked = true;
+            confettiActive = true;
+            startConfetti();
+
+            // 1. Coriandoli per 5 secondi, poi Flip
+            setTimeout(() => { 
+                confettiActive = false; 
+                flipCard.classList.add('flipped');
+
+                // 2. Dopo 6 secondi di visione del retro, mostra vittoria
+                setTimeout(() => {
+                    victoryScreen.style.display = 'flex';
+                    setTimeout(() => victoryScreen.classList.add('show'), 100);
+                }, 6000);
+
+            }, 5000);
+        }
+
+        function showCode() {
+            document.getElementById('secret-number').style.display = 'block';
+            document.getElementById('revealBtn').style.display = 'none';
+        }
+
+        // --- CORIANDOLI ---
+        let particles = [];
+        function startConfetti() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            for(let i=0; i<150; i++) particles.push({
+                x: Math.random()*canvas.width, y: -20, 
+                c: ['#ff0000', '#f1c40f', '#ffffff'][Math.floor(Math.random()*3)],
+                v: Math.random()*3+2, s: Math.random()*5+2, xV: Math.random()*2-1
+            });
+            updateConfetti();
+        }
+        function updateConfetti() {
+            if(!confettiActive) { ctx.clearRect(0,0,canvas.width,canvas.height); return; }
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            particles.forEach(p => {
+                p.y += p.v; p.x += p.xV;
+                ctx.fillStyle = p.c;
+                ctx.fillRect(p.x, p.y, p.s, p.s);
+                if(p.y > canvas.height) p.y = -10;
+            });
+            requestAnimationFrame(updateConfetti);
+        }
+
+        init();
+    </script>
+</body>
+</html>
