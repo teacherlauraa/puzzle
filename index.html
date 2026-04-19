@@ -24,7 +24,7 @@
             height: 100vh;
             background-color: rgba(20, 0, 0, 0.95);
             border: 4px solid #ff0000; 
-            padding: 20px;
+            padding: 25px;
             display: flex; flex-direction: column;
             justify-content: space-between;
             box-shadow: 10px 0 25px rgba(255,0,0,0.3);
@@ -33,36 +33,37 @@
 
         h1 {
             color: #ff0000;
-            font-size: 1.6rem;
+            font-size: 1.8rem;
             margin: 0;
             text-transform: uppercase;
             text-align: center;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
             line-height: 1.3;
             text-shadow: 0 0 10px rgba(255,0,0,0.5);
         }
 
         .mission-box {
             background: #2a0000;
-            padding: 15px;
+            padding: 20px;
             border-radius: 4px;
             border: 1px solid #ff4444;
         }
 
         .mission-box h2 {
-            font-size: 1.2rem;
-            margin: 0 0 10px 0;
+            font-size: 1.3rem;
+            margin: 0 0 15px 0;
             color: #ff0000;
             border-bottom: 2px solid #ff0000;
             text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .mission-box p {
-            font-size: 1rem;
+            font-size: 1.1rem;
             line-height: 1.6;
             margin: 10px 0;
             color: #ffffff;
-            font-weight: 500;
+            font-weight: 700;
             text-transform: uppercase;
         }
 
@@ -81,8 +82,9 @@
         }
 
         #btn-shuffle:hover {
-            background-color: #fff;
+            background-color: #ffffff;
             color: #ff0000;
+            box-shadow: 0 0 20px #ff0000;
         }
 
         /* --- AREA GIOCO --- */
@@ -91,7 +93,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 0;
+            padding: 20px;
             height: 100vh;
         }
 
@@ -124,8 +126,7 @@
         }
 
         .tile {
-            width: 140px; 
-            height: 70px; 
+            width: 100%; height: 100%;
             background-image: url('classe.jpg');
             background-size: 840px 420px; 
             cursor: pointer;
@@ -162,23 +163,38 @@
 
         #victory-screen.show { display: flex; opacity: 1; }
         
-        /* TESTO VITTORIA: RIMOSSO CORSIVO */
         #victory-screen p { 
-            font-style: normal !important; 
-            max-width: 800px; 
-            font-size: 1.3rem; 
-            line-height: 1.6; 
-            margin: 20px auto; 
+            font-style: normal; 
+            max-width: 850px; 
+            font-size: 1.4rem; 
+            line-height: 1.8; 
+            margin: 25px auto; 
             padding: 0 20px;
-            color: #eee;
+            color: #eeeeee;
+            font-weight: 500;
+            text-transform: uppercase;
         }
 
-        #secret-number { font-size: 8rem; color: #f1c40f; display: none; font-weight: bold; text-shadow: 0 0 30px #f1c40f; }
+        #secret-number { 
+            font-size: 10rem; 
+            color: #f1c40f; 
+            display: none; 
+            font-weight: 700; 
+            text-shadow: 0 0 40px #f1c40f; 
+            margin: 20px 0;
+        }
 
         .btn-reveal {
-            padding: 15px 50px; background-color: #ff0000; color: #fff;
-            border: 2px solid #fff; border-radius: 5px; font-weight: 700;
-            cursor: pointer; text-transform: uppercase; margin-top: 20px;
+            padding: 18px 60px; 
+            background-color: #ff0000; 
+            color: #ffffff;
+            border: 2px solid #ffffff; 
+            border-radius: 5px; 
+            font-weight: 700;
+            font-size: 1.2rem;
+            cursor: pointer; 
+            text-transform: uppercase; 
+            margin-top: 20px;
         }
 
         #confetti-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 999; }
@@ -187,7 +203,7 @@
 <body>
 
     <div id="sidebar">
-        <h1>PROGETTO EROI:<br>IL PUZZLE DELL'UNIONE</h1>
+        <h1>IL PUZZLE<br>DELL'UNIONE</h1>
         
         <div class="mission-box">
             <h2>ISTRUZIONI</h2>
@@ -209,9 +225,9 @@
     <canvas id="confetti-canvas"></canvas>
 
     <div id="victory-screen">
-        <h2 style="color:#ff0000; font-size: 3.5rem; margin: 0;">MISSIONE COMPIUTA</h2>
+        <h2 style="color:#ff0000; font-size: 4rem; margin: 0; font-weight: 700;">MISSIONE COMPIUTA</h2>
         <p>
-            "PROPRIO COME OGNI GRANDE SQUADRA DI SUPEREROI, OGNI ELEMENTO DI QUESTA CLASSE È UN PEZZO UNICO E INDISPENSABILE. SEPARATAMENTE SIETE INDIVIDUI STRAORDINARI, MA È SOLO QUANDO SIETE UNITI, FIANCO a FIANCO, CHE L'IMMAGINE DEL VOSTRO REALE POTENZIALE DIVENTA CHIARA. BEN FATTO, EROI!"
+            PROPRIO COME OGNI GRANDE SQUADRA DI SUPEREROI, OGNI ELEMENTO DI QUESTA CLASSE È UN PEZZO UNICO E INDISPENSABILE. SEPARATAMENTE SIETE INDIVIDUI STRAORDINARI, MA È SOLO QUANDO SIETE UNITI, FIANCO A FIANCO, CHE L'IMMAGINE DEL VOSTRO REALE POTENZIALE DIVENTA CHIARA. BEN FATTO, EROI!
         </p>
         
         <div id="secret-number">3</div>
