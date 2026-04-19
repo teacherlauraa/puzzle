@@ -26,7 +26,7 @@
             border: 4px solid #ff0000; 
             padding: 25px;
             display: flex; flex-direction: column;
-            justify-content: space-between;
+            justify-content: flex-start;
             box-shadow: 10px 0 25px rgba(255,0,0,0.3);
             z-index: 10;
         }
@@ -34,7 +34,7 @@
         h1 {
             color: #ff0000;
             font-size: 1.8rem;
-            margin: 0;
+            margin: 0 0 30px 0;
             text-transform: uppercase;
             text-align: center;
             letter-spacing: 2px;
@@ -47,6 +47,7 @@
             padding: 20px;
             border-radius: 4px;
             border: 1px solid #ff4444;
+            margin-bottom: 20px; /* Ridotto per permettere al pulsante di salire */
         }
 
         .mission-box h2 {
@@ -55,7 +56,6 @@
             color: #ff0000;
             border-bottom: 2px solid #ff0000;
             text-transform: uppercase;
-            letter-spacing: 1px;
         }
 
         .mission-box p {
@@ -79,12 +79,15 @@
             cursor: pointer;
             text-transform: uppercase;
             transition: 0.3s;
+            /* Spostamento verso l'alto di 1 cm (circa 38px) tramite margine negativo */
+            margin-top: -38px; 
+            position: relative;
+            z-index: 11;
         }
 
         #btn-shuffle:hover {
             background-color: #ffffff;
             color: #ff0000;
-            box-shadow: 0 0 20px #ff0000;
         }
 
         /* --- AREA GIOCO --- */
@@ -93,7 +96,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 20px;
             height: 100vh;
         }
 
@@ -204,7 +206,7 @@
 
     <div id="sidebar">
         <h1>IL PUZZLE<br>DELL'UNIONE</h1>
-        
+
         <div class="mission-box">
             <h2>ISTRUZIONI</h2>
             <p>1. SCEGLI: CLICCA UNA TESSERA PER ATTIVARE LA SELEZIONE TATTICA.</p>
