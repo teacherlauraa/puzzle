@@ -9,7 +9,7 @@
         
         html, body {
             margin: 0; padding: 0;
-            width: 100%; height: 100%;
+            width: 100vw; height: 100vh;
             overflow: hidden;
             background: radial-gradient(circle, #450000 0%, #000000 100%);
             font-family: 'Oswald', sans-serif;
@@ -20,11 +20,11 @@
 
         /* --- SIDEBAR --- */
         #sidebar {
-            width: 280px; min-width: 280px;
+            width: 300px; min-width: 300px;
             height: 100vh;
             background-color: rgba(20, 0, 0, 0.95);
-            border-right: 4px solid #ff0000;
-            padding: 25px;
+            border: 4px solid #ff0000; 
+            padding: 20px;
             display: flex; flex-direction: column;
             justify-content: space-between;
             box-shadow: 10px 0 25px rgba(255,0,0,0.3);
@@ -44,24 +44,26 @@
 
         .mission-box {
             background: #2a0000;
-            padding: 20px;
+            padding: 15px;
             border-radius: 4px;
             border: 1px solid #ff4444;
         }
 
         .mission-box h2 {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             margin: 0 0 10px 0;
             color: #ff0000;
-            border-bottom: 1px solid #ff0000;
+            border-bottom: 2px solid #ff0000;
             text-transform: uppercase;
         }
 
         .mission-box p {
-            font-size: 0.95rem;
-            line-height: 1.5;
+            font-size: 1rem;
+            line-height: 1.6;
             margin: 10px 0;
-            color: #ffcccc;
+            color: #ffffff;
+            font-weight: 500;
+            text-transform: uppercase;
         }
 
         #btn-shuffle {
@@ -69,7 +71,7 @@
             padding: 15px;
             background-color: #ff0000;
             color: #fff;
-            border: none;
+            border: 2px solid #fff;
             border-radius: 2px;
             font-weight: 700;
             font-size: 1.1rem;
@@ -79,17 +81,18 @@
         }
 
         #btn-shuffle:hover {
-            background-color: #ff4444;
-            box-shadow: 0 0 20px #ff0000;
+            background-color: #fff;
+            color: #ff0000;
         }
 
-        /* --- AREA GIOCO 3D --- */
+        /* --- AREA GIOCO --- */
         #game-area {
             flex-grow: 1;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 10px;
+            padding: 0;
+            height: 100vh;
         }
 
         #flip-card {
@@ -146,7 +149,7 @@
         #victory-screen {
             display: none;
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
+            top: 0; left: 0; width: 100vw; height: 100vh;
             background: rgba(0,0,0,0.96);
             z-index: 1000;
             flex-direction: column;
@@ -159,6 +162,17 @@
 
         #victory-screen.show { display: flex; opacity: 1; }
         
+        /* TESTO VITTORIA: RIMOSSO CORSIVO */
+        #victory-screen p { 
+            font-style: normal !important; 
+            max-width: 800px; 
+            font-size: 1.3rem; 
+            line-height: 1.6; 
+            margin: 20px auto; 
+            padding: 0 20px;
+            color: #eee;
+        }
+
         #secret-number { font-size: 8rem; color: #f1c40f; display: none; font-weight: bold; text-shadow: 0 0 30px #f1c40f; }
 
         .btn-reveal {
@@ -177,9 +191,9 @@
         
         <div class="mission-box">
             <h2>ISTRUZIONI</h2>
-            <p>1. <b>Scegli:</b> Clicca una tessera per attivare la selezione tattica.</p>
-            <p>2. <b>Sposta:</b> Clicca un'altra tessera per scambiare i frammenti.</p>
-            <p>3. <b>Unite:</b> Ricomponi la squadra per completare la missione.</p>
+            <p>1. SCEGLI: CLICCA UNA TESSERA PER ATTIVARE LA SELEZIONE TATTICA.</p>
+            <p>2. SPOSTA: CLICCA UN'ALTRA TESSERA PER SCAMBIARE I FRAMMENTI.</p>
+            <p>3. UNITE: RICOMPONI LA SQUADRA PER COMPLETARE LA MISSIONE.</p>
         </div>
 
         <button id="btn-shuffle" onclick="location.reload()">RIMESCOLA</button>
@@ -196,8 +210,8 @@
 
     <div id="victory-screen">
         <h2 style="color:#ff0000; font-size: 3.5rem; margin: 0;">MISSIONE COMPIUTA</h2>
-        <p style="font-style: italic; max-width: 800px; font-size: 1.3rem; line-height: 1.6; margin: 20px auto; padding: 0 20px;">
-            "Proprio come ogni grande squadra di supereroi, ogni elemento di questa classe è un pezzo unico e indispensabile. Separatamente siete individui straordinari, ma è solo quando siete uniti, fianco a fianco, che l'immagine del vostro reale potenziale diventa chiara. Ben fatto, eroi!"
+        <p>
+            "PROPRIO COME OGNI GRANDE SQUADRA DI SUPEREROI, OGNI ELEMENTO DI QUESTA CLASSE È UN PEZZO UNICO E INDISPENSABILE. SEPARATAMENTE SIETE INDIVIDUI STRAORDINARI, MA È SOLO QUANDO SIETE UNITI, FIANCO a FIANCO, CHE L'IMMAGINE DEL VOSTRO REALE POTENZIALE DIVENTA CHIARA. BEN FATTO, EROI!"
         </p>
         
         <div id="secret-number">3</div>
@@ -257,12 +271,10 @@
             confettiActive = true;
             startConfetti();
 
-            // 1. Coriandoli per 5 secondi, poi Flip
             setTimeout(() => { 
                 confettiActive = false; 
                 flipCard.classList.add('flipped');
 
-                // 2. Dopo 6 secondi di visione del retro, mostra vittoria
                 setTimeout(() => {
                     victoryScreen.style.display = 'flex';
                     setTimeout(() => victoryScreen.classList.add('show'), 100);
@@ -276,16 +288,17 @@
             document.getElementById('revealBtn').style.display = 'none';
         }
 
-        // --- CORIANDOLI ---
         let particles = [];
         function startConfetti() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
-            for(let i=0; i<150; i++) particles.push({
-                x: Math.random()*canvas.width, y: -20, 
-                c: ['#ff0000', '#f1c40f', '#ffffff'][Math.floor(Math.random()*3)],
-                v: Math.random()*3+2, s: Math.random()*5+2, xV: Math.random()*2-1
-            });
+            for(let i=0; i<150; i++) {
+                particles.push({
+                    x: Math.random()*canvas.width, y: -20, 
+                    c: ['#ff0000', '#f1c40f', '#ffffff'][Math.floor(Math.random()*3)],
+                    v: Math.random()*3+2, s: Math.random()*5+2, xV: Math.random()*2-1
+                });
+            }
             updateConfetti();
         }
         function updateConfetti() {
